@@ -6,6 +6,7 @@ zip -r esbackup.zip esbackup
 mkdir -p esparts
 rm -rf esparts/*
 
+echo "Now starting split... Please wait."
 split --bytes=100MB esbackup.zip esparts/esbackup.zip_
 
 if [ $? -eq 0 ]; then

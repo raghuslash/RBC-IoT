@@ -13,7 +13,7 @@ fi
 cd esparts
 
 cat esbackup.zip* > backup.zip
-tar -xvf backup.zip
+unzip backup.zip
 
 if [ $? -eq 0 ]
 then
