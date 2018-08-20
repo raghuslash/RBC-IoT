@@ -17,10 +17,11 @@ class csv_data():
         self.pp2_vibration_flag=False
         self.pp2_vaf_flag=False
         self.reflow_vaf_flag=False
-    def loadData(self):
+    def loadData(self, machine):
 
         pattern="%Y-%m-%dT%H:%M:%S.%f" # format of the timestamp
         ################Loader's vibration data loading###################
+
         print("loader vibration data started loading \n")
         try  :
             self.loader_vibration=pd.read_csv(self.data_files['file names']['loader']['vibration'],usecols=['data.timestamp','data.ax','data.ay','data.az'])
@@ -30,8 +31,8 @@ class csv_data():
             print("loader's vibration data finished loading \n")
         except : 
             print("Specified file doesn't exist,change in yaml file ") 
-            sys.stderr.write('Ok quitting')
-            sys.exit(1)
+            # sys.stderr.write('Ok quitting')
+            # sys.exit(1)
         
         ###################################################################
 
@@ -47,8 +48,8 @@ class csv_data():
             print("finish loading pickandplace1 vibration")
         except : 
             print("Specified file doesn't exist,change in yaml file ") 
-            sys.stderr.write('Ok quitting')
-            sys.exit(1)
+            # sys.stderr.write('Ok quitting')
+            # sys.exit(1)
         #########################pick and place1 vaf loading############################
         try :
             print("pick and place 1 vaf loading \n")
@@ -58,8 +59,8 @@ class csv_data():
             self.pp1_vaf.sort_index()
         except : 
             print("Specified file doesn't exist,change in yaml file ") 
-            sys.stderr.write('Ok quitting')
-            sys.exit(1)
+            # sys.stderr.write('Ok quitting')
+            # sys.exit(1)
         #########################screen printer data loading############################
         try :
             print("screen printer data loading \n")
@@ -70,8 +71,8 @@ class csv_data():
             self.sp_vaf.sort_index()
         except :
             print("Specified file doesn't exist,change in yaml file ") 
-            sys.stderr.write('Ok quitting')
-            sys.exit(1)
+            # sys.stderr.write('Ok quitting')
+            # sys.exit(1)
         ##################################################################################
         #########################reflow oven data loading############################
         try :
@@ -83,15 +84,17 @@ class csv_data():
             self.rf_vaf.sort_index()
         except :
             print("Specified file doesn't exist,change in yaml file ") 
-            sys.stderr.write('Ok quitting')
-            sys.exit(1)
+            # sys.stderr.write('Ok quitting')
+            # sys.exit(1)
         ##################################################################################
 
     def setMachine(self,machine,sensor):
         #try :
+        self.loadData(machine)
         mach=eval("self.%s_%s"%(machine,sensor))
         self.machine=[]
         self.machine = mach
+
         if hasattr(self.machine,'attr_name'):
             print("%s is not an attribute in the object csv_data"%(self.machine))
         #except NameError :
@@ -115,9 +118,8 @@ class csv_data():
     def getData(self,field):
         return self.machine[self.start_time][self.stop_time][str("data."+field)].sort_index()
     
-    def analyse(self,start_time,stop_time):
-        pass
-    
+    # def analyse(self,start_time,stop_time):
+    #     pass
     # def VibrationRollingVariance(self,start_time,stop_time,window):
     #     self.varianceResult=self.machine[start_time:stop_time]['data.ax'].sort_index().rolling(window=window).var()
     #     return self.varianceResult
@@ -130,8 +132,7 @@ class csv_data():
 
 if __name__=='__main__':
     data=csv_data('data.yaml')
-    data.loadData()
-    data.setMachine('pp1','vibration')
+    data.setMachine('rf','power')
     # data.setTimeFrame('2018-03-14 10:30:00','2018-03-14 10:35:00')
     data.getData('ax')
     #data.setMachine('loader','vibration')
