@@ -68,6 +68,7 @@ statep3['state'] = np.where((dfp3['data.A3'] <= .75 * maxcur3) & (dfp3['data.A3'
 # statep1.to_csv('statep1.csv')
 # statep2.to_csv('statep2.csv')
 # statep3.to_csv('statep3.csv')
+
 directory=rffile[0:-4]
 print('Now generating plots for '+directory+'.')
 directory+='_plots'
